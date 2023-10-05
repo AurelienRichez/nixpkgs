@@ -4,6 +4,9 @@
 , jre
 , autoPatchelfHook
 , zlib
+, coreutils
+# Allows sbt to use the java from PATH instead of harcoding it in the conf file
+, wrapJdk ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-kj15F8y5mp/ZhfSr/YHKrK7UIoTmfT92lsxSOefFlcs=";
   };
 
-  postPatch = ''
+  postPatch = lib.optionalString wrapJdk ''
     echo -java-home ${jre.home} >>conf/sbtopts
   '';
 
